@@ -2,7 +2,13 @@ import Head from "next/head";
 import { useState } from "react";
 import GraphCard from "../components/GraphCard";
 
-export default function Home({ bitcoinPrice, entropy, imeActivation }) {
+interface HomeProps {
+  bitcoinPrice: number;
+  entropy: number;
+  imeActivation: number;
+}
+
+export default function Home({ bitcoinPrice, entropy, imeActivation }: HomeProps) {
   const [darkMode, setDarkMode] = useState(true);
 
   return (
@@ -10,7 +16,7 @@ export default function Home({ bitcoinPrice, entropy, imeActivation }) {
       <Head>
         <title>IME Live Observatory</title>
       </Head>
-      <main className={\`flex flex-col items-center justify-center min-h-screen p-4 font-mono \${darkMode ? "bg-black text-white" : "bg-white text-black"}\`}>
+      <main className={`flex flex-col items-center justify-center min-h-screen p-4 font-mono ${darkMode ? "bg-black text-white" : "bg-white text-black"}`}>
         <button
           onClick={() => setDarkMode(!darkMode)}
           className="absolute top-4 right-4 px-4 py-1 border rounded text-sm"
