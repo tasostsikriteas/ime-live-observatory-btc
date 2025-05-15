@@ -26,7 +26,7 @@ export default function Home({ bitcoinPrice, entropy, imeActivation }: HomeProps
 
         <h1 className="text-3xl mb-2 mt-4">🧠 IME Live Observatory</h1>
         <div className="text-xl mb-4 text-yellow-500 font-semibold">
-          💰 Bitcoin Price: ${bitcoinPrice > 0 ? bitcoinPrice.toFixed(2) : 'Unavailable'}
+          💰 Bitcoin Price: {bitcoinPrice > 0 ? `$${bitcoinPrice.toFixed(2)}` : 'Unavailable'}
         </div>
         <GraphCard />
         <p className="mt-6 text-sm text-gray-400">Powered by I.M.E. Theory</p>
@@ -39,11 +39,16 @@ export async function getServerSideProps() {
   let bitcoinPrice = 0;
 
   try {
-    const res = await fetch("https://api.coindesk.com/v1/bpi/currentprice/USD.json");
+    const res = await fetch("https://api.coinbase.com/v2/prices/spot?currency=USD", {
+      headers: {
+        "User-Agent": "IME Observatory Bot",
+        "Accept": "application/json",
+      },
+    });
     const data = await res.json();
-    bitcoinPrice = parseFloat(data.bpi.USD.rate.replace(',', ''));
+    bitcoinPrice = parseFloat(data?.data?.amount || "0");
   } catch (error) {
-    console.error("Failed to fetch Bitcoin price:", error);
+    console.error("❌ BTC API Fetch Failed:", error);
     bitcoinPrice = -1;
   }
 
